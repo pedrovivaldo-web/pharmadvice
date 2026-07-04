@@ -13,6 +13,7 @@ import { getSubstancia } from '../data/substancias.js';
 import { triar } from './triagem.js';
 import { filtrarCatalogo } from './gateClinico.js';
 import { ordenarComercial } from './rankingComercial.js';
+import { recomendarConjunto } from './crossSell.js';
 
 /**
  * @param {object} consulta   { sintoma, duracaoDias, intensidade, doente, respostas }
@@ -29,6 +30,7 @@ export function aconselhar(consulta, catalogo, config = {}) {
       motivo: triagem.sintomaDesconhecido ? 'sintoma-fora-de-ambito' : 'sinais-de-alarme',
       sinaisAlarme: triagem.sinais,
       recomendacoes: [],
+      conjunto: [],
       semStock: [],
       excluidos: [],
       sintoma: consulta?.sintoma ?? null,
@@ -44,11 +46,17 @@ export function aconselhar(consulta, catalogo, config = {}) {
   // Fase 3 — ranking comercial
   const { ranking, semStock } = ordenarComercial(aptos, config);
 
+  // Fase 4 — cross-selling: conjunto de produtos complementares (um por papel).
+  const { conjunto, conflitos } = recomendarConjunto(consulta, catalogo, config);
+
   return {
     referenciar: false,
     motivo: null,
     sinaisAlarme: [],
     sintoma: sintoma.id,
+    // Conjunto de co-recomendação (cross-selling), já com guarda de combinação.
+    conjunto,
+    conflitosCombinacao: conflitos,
     // Recomendações ordenadas: 1.ª é a sugestão principal.
     recomendacoes: ranking.map((r, idx) => ({
       ordem: idx + 1,

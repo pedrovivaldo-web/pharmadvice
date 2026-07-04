@@ -95,6 +95,11 @@ export const SINTOMAS = {
     id: 'congestao-nasal',
     nome: 'Congestão nasal / constipação',
     substanciasIndicadas: ['pseudoefedrina', 'xilometazolina', 'paracetamol'],
+    // Papéis para cross-selling: um produto por papel, seguros em conjunto.
+    papeis: [
+      { id: 'descongestionante', nome: 'Descongestionante', dcis: ['pseudoefedrina', 'xilometazolina'], principal: true },
+      { id: 'analgesico', nome: 'Analgésico/antipirético (dores e febre associadas)', dcis: ['paracetamol', 'ibuprofeno', 'aas'], principal: false },
+    ],
     sinaisAlarme: [
       {
         id: 'sinusite-prolongada',

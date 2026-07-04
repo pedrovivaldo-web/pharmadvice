@@ -13,6 +13,7 @@ export { aconselhar } from './lib/aconselhar.js';
 export { triar } from './lib/triagem.js';
 export { avaliarProduto, filtrarCatalogo } from './lib/gateClinico.js';
 export { ordenarComercial, PESOS_PADRAO } from './lib/rankingComercial.js';
+export { recomendarConjunto, conflitoCombinacao } from './lib/crossSell.js';
 export {
   sintomasParaUI,
   perguntasTriagem,
