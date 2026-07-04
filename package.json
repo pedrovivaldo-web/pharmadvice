@@ -1,0 +1,14 @@
+{
+  "name": "pharmadvice",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Ferramenta de apoio à decisão do farmacêutico para aconselhamento de MNSRM e produtos de saúde, com ranking por rentabilidade e stock — sempre após triagem e gate clínico.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
