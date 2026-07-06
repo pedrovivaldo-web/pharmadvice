@@ -435,6 +435,62 @@ export const SUBSTANCIAS = {
     ],
     interacoes: [],
   },
+
+  // ===================================================================
+  // Lote 2 (PROPOSTA — validar): herpes, micoses, hemorroidas, aftas, prurido
+  // ===================================================================
+
+  // Herpes labial
+  'aciclovir-topico': {
+    dci: 'aciclovir-topico', nome: 'Aciclovir creme (lábio)', classe: 'antiviral-topico',
+    posologiaAdulto: 'Aplicar 5x/dia durante 4–5 dias, aos primeiros sinais (formigueiro)',
+    contraindicacoes: [], interacoes: [],
+  },
+
+  // Micoses cutâneas
+  'clotrimazol-topico': { dci: 'clotrimazol-topico', nome: 'Clotrimazol creme', classe: 'antifungico-topico', posologiaAdulto: '2–3x/dia, 2–4 semanas (continuar após melhoria)', contraindicacoes: [], interacoes: [] },
+  'econazol-topico': { dci: 'econazol-topico', nome: 'Econazol creme/pó', classe: 'antifungico-topico', posologiaAdulto: '1–2x/dia, 2–4 semanas', contraindicacoes: [], interacoes: [] },
+  'tioconazol-topico': { dci: 'tioconazol-topico', nome: 'Tioconazol creme', classe: 'antifungico-topico', posologiaAdulto: '1–2x/dia, 2–4 semanas', contraindicacoes: [], interacoes: [] },
+  'terbinafina-topico': { dci: 'terbinafina-topico', nome: 'Terbinafina creme', classe: 'antifungico-topico', posologiaAdulto: '1–2x/dia, 1–2 semanas', contraindicacoes: [], interacoes: [] },
+
+  // Candidíase vaginal
+  'clotrimazol-vaginal': {
+    dci: 'clotrimazol-vaginal', nome: 'Clotrimazol (óvulo/creme vaginal)', classe: 'antifungico-vaginal',
+    posologiaAdulto: 'Óvulo à noite (esquema 1–3 dias) ± creme na zona externa',
+    contraindicacoes: [
+      { id: 'cv-idade', descricao: 'Fora dos 16–60 anos — referenciar', gravidade: 'absoluta', avaliar: (d) => d.idade < 16 || d.idade > 60 },
+    ],
+    interacoes: [],
+  },
+
+  // Hemorroidas
+  'antihemorroidario-topico': {
+    dci: 'antihemorroidario-topico', nome: 'Antihemorroidário tópico (com anestésico local)', classe: 'hemorroidas-topico',
+    posologiaAdulto: 'Aplicar após higiene, 1–2x/dia e após a dejeção, poucos dias',
+    contraindicacoes: [], interacoes: [],
+  },
+
+  // Aftas
+  'afta-local': {
+    dci: 'afta-local', nome: 'Tratamento local de aftas', classe: 'afta-local',
+    posologiaAdulto: 'Aplicar na lesão 2–3x/dia, após as refeições',
+    contraindicacoes: [], interacoes: [],
+  },
+
+  // Picadas / prurido / dermatite ligeira
+  'dimetindeno-topico': {
+    dci: 'dimetindeno-topico', nome: 'Dimetindeno gel (anti-histamínico tópico)', classe: 'anti-histaminico-topico',
+    posologiaAdulto: 'Aplicar 2–4x/dia; não em áreas extensas nem pele lesada',
+    contraindicacoes: [], interacoes: [],
+  },
+  'hidrocortisona-topico': {
+    dci: 'hidrocortisona-topico', nome: 'Hidrocortisona 1% creme', classe: 'corticoide-topico',
+    posologiaAdulto: '1–2x/dia, máx. 7 dias; NÃO na face/olhos nem em pele infetada',
+    contraindicacoes: [
+      { id: 'hc-idade', descricao: 'Não usar abaixo dos 10 anos sem indicação', gravidade: 'absoluta', avaliar: (d) => d.idade < 10 },
+    ],
+    interacoes: [],
+  },
 };
 
 export function getSubstancia(dci) {

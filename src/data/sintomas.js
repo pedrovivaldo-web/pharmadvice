@@ -286,6 +286,90 @@ export const SINTOMAS = {
       { id: 'musc-febre', descricao: 'Zona quente, vermelha e com febre (infeção)', pergunta: 'A zona está quente e vermelha, com febre?', avaliar: (c) => resp(c, 'musc-febre') },
     ],
   },
+
+  // ===================================================================
+  // Lote 2 (PROPOSTA — validar): herpes, micoses, hemorroidas, aftas, prurido
+  // ===================================================================
+
+  'herpes-labial': {
+    id: 'herpes-labial',
+    nome: 'Herpes labial',
+    substanciasIndicadas: ['aciclovir-topico'],
+    papeis: [{ id: 'antiviral', nome: 'Antiviral tópico', dcis: ['aciclovir-topico'], principal: true }],
+    sinaisAlarme: [
+      { id: 'herpes-imuno', descricao: 'Sistema imunitário debilitado (imunossupressão)', pergunta: 'Tem o sistema imunitário debilitado (ex.: quimioterapia, imunossupressores)?', avaliar: (c) => resp(c, 'herpes-imuno') },
+      { id: 'herpes-olho', descricao: 'Lesão junto ao olho', pergunta: 'A lesão é perto do olho?', avaliar: (c) => resp(c, 'herpes-olho') },
+      { id: 'herpes-boca', descricao: 'Lesões extensas dentro da boca/gengivas (primoinfecção)', pergunta: 'Tem muitas lesões dentro da boca ou nas gengivas?', avaliar: (c) => resp(c, 'herpes-boca') },
+      { id: 'herpes-prolongado', descricao: 'Lesão que não sara em > 14 dias', pergunta: null, avaliar: (c) => duracaoDias(c) > 14 },
+    ],
+  },
+
+  'micose-cutanea': {
+    id: 'micose-cutanea',
+    nome: 'Micose da pele (pé de atleta, etc.)',
+    substanciasIndicadas: ['clotrimazol-topico', 'terbinafina-topico', 'econazol-topico', 'tioconazol-topico'],
+    papeis: [{ id: 'antifungico', nome: 'Antifúngico tópico', dcis: ['clotrimazol-topico', 'terbinafina-topico', 'econazol-topico', 'tioconazol-topico'], principal: true }],
+    sinaisAlarme: [
+      { id: 'mic-unhas', descricao: 'Unhas afetadas (onicomicose — tratamento oral/médico)', pergunta: 'As unhas estão afetadas?', avaliar: (c) => resp(c, 'mic-unhas') },
+      { id: 'mic-extenso', descricao: 'Grande extensão ou couro cabeludo', pergunta: 'É uma área grande ou no couro cabeludo?', avaliar: (c) => resp(c, 'mic-extenso') },
+      { id: 'mic-diabetes', descricao: 'Pessoa com diabetes (maior risco)', pergunta: null, avaliar: (c) => (c?.doente?.patologias ?? []).includes('diabetes') },
+      { id: 'mic-infecao', descricao: 'Sinais de infeção bacteriana (pus, calor, vermelhidão intensa)', pergunta: 'Tem sinais de infeção (pus, calor, vermelhidão intensa)?', avaliar: (c) => resp(c, 'mic-infecao') },
+      { id: 'mic-prolongada', descricao: 'Sem melhoria após 2–4 semanas', pergunta: null, avaliar: (c) => duracaoDias(c) > 28 },
+    ],
+  },
+
+  'candidiase-vaginal': {
+    id: 'candidiase-vaginal',
+    nome: 'Candidíase vaginal',
+    substanciasIndicadas: ['clotrimazol-vaginal'],
+    papeis: [{ id: 'antifungico-vaginal', nome: 'Antifúngico vaginal', dcis: ['clotrimazol-vaginal'], principal: true }],
+    sinaisAlarme: [
+      { id: 'cv-primeiro', descricao: 'Primeiro episódio / nunca diagnosticado por médico', pergunta: 'É a primeira vez, ou nunca foi diagnosticada por um médico?', avaliar: (c) => resp(c, 'cv-primeiro') },
+      { id: 'cv-recorrente', descricao: 'Episódios frequentes (> 4 por ano)', pergunta: 'Tem mais de 4 episódios por ano?', avaliar: (c) => resp(c, 'cv-recorrente') },
+      { id: 'cv-atipico', descricao: 'Corrimento com cheiro/cor atípica, dor pélvica ou febre', pergunta: 'Tem corrimento com mau cheiro/cor atípica, dor pélvica ou febre?', avaliar: (c) => resp(c, 'cv-atipico') },
+      { id: 'cv-gravidez', descricao: 'Gravidez — referenciar', pergunta: null, avaliar: (c) => c?.doente?.gravidez === true },
+      { id: 'cv-idade', descricao: 'Fora dos 16–60 anos', pergunta: null, avaliar: (c) => (c?.doente?.idade ?? 30) < 16 || (c?.doente?.idade ?? 30) > 60 },
+    ],
+  },
+
+  hemorroidas: {
+    id: 'hemorroidas',
+    nome: 'Hemorroidas',
+    substanciasIndicadas: ['antihemorroidario-topico'],
+    papeis: [{ id: 'topico', nome: 'Antihemorroidário tópico', dcis: ['antihemorroidario-topico'], principal: true }],
+    sinaisAlarme: [
+      { id: 'hem-sangue', descricao: 'Sangue abundante, escuro ou misturado nas fezes', pergunta: 'O sangue é abundante, escuro ou misturado com as fezes?', avaliar: (c) => resp(c, 'hem-sangue') },
+      { id: 'hem-habito', descricao: 'Alteração do hábito intestinal ou perda de peso', pergunta: 'Houve mudança do hábito intestinal ou perda de peso?', avaliar: (c) => resp(c, 'hem-habito') },
+      { id: 'hem-dor', descricao: 'Dor intensa ou nódulo endurecido (trombose)', pergunta: 'Tem dor intensa ou um nódulo duro?', avaliar: (c) => resp(c, 'hem-dor') },
+    ],
+  },
+
+  aftas: {
+    id: 'aftas',
+    nome: 'Aftas / feridas na boca',
+    substanciasIndicadas: ['afta-local', 'benzidamina'],
+    papeis: [{ id: 'local', nome: 'Tratamento local', dcis: ['afta-local', 'benzidamina'], principal: true }],
+    sinaisAlarme: [
+      { id: 'afta-prolongada', descricao: 'Ferida na boca que não sara em > 3 semanas (referenciar)', pergunta: null, avaliar: (c) => duracaoDias(c) > 21 },
+      { id: 'afta-multiplas', descricao: 'Múltiplas, recorrentes ou muito grandes', pergunta: 'São múltiplas, recorrentes ou muito grandes?', avaliar: (c) => resp(c, 'afta-multiplas') },
+      { id: 'afta-sistemico', descricao: 'Com febre ou mal-estar geral', pergunta: 'Tem febre ou mal-estar geral?', avaliar: (c) => resp(c, 'afta-sistemico') },
+    ],
+  },
+
+  'picadas-prurido': {
+    id: 'picadas-prurido',
+    nome: 'Picadas / comichão / dermatite ligeira',
+    substanciasIndicadas: ['hidrocortisona-topico', 'dimetindeno-topico', 'loratadina', 'cetirizina'],
+    papeis: [
+      { id: 'topico', nome: 'Alívio tópico', dcis: ['hidrocortisona-topico', 'dimetindeno-topico'], principal: true },
+      { id: 'anti-histaminico', nome: 'Anti-histamínico oral (comichão)', dcis: ['loratadina', 'cetirizina'], principal: false },
+    ],
+    sinaisAlarme: [
+      { id: 'pic-anafilaxia', descricao: 'Falta de ar, inchaço da língua/lábios ou urticária generalizada (EMERGÊNCIA)', pergunta: 'Tem falta de ar, inchaço da língua/lábios ou borbulhas por todo o corpo?', avaliar: (c) => resp(c, 'pic-anafilaxia') },
+      { id: 'pic-infecao', descricao: 'Sinais de infeção (pus, calor, vermelhidão a alastrar)', pergunta: 'Tem sinais de infeção (pus, calor, vermelhidão a alastrar)?', avaliar: (c) => resp(c, 'pic-infecao') },
+      { id: 'pic-carraca', descricao: 'Picada de carraça ou halo vermelho em expansão', pergunta: 'Foi picada de carraça ou tem um halo vermelho a crescer?', avaliar: (c) => resp(c, 'pic-carraca') },
+    ],
+  },
 };
 
 export function getSintoma(id) {
