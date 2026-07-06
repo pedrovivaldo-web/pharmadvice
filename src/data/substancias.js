@@ -293,6 +293,148 @@ export const SUBSTANCIAS = {
       { comDci: 'clopidogrel', descricao: 'Reduz o efeito antiagregante do clopidogrel', gravidade: 'moderada' },
     ],
   },
+
+  // ===================================================================
+  // Substâncias acrescentadas (PROPOSTA — validar) para novos sintomas
+  // ===================================================================
+
+  // --- Dor de garganta ---
+  'pastilha-garganta': {
+    dci: 'pastilha-garganta',
+    nome: 'Pastilha antisséptica para a garganta',
+    classe: 'garganta-local',
+    posologiaAdulto: 'Chupar 1 pastilha a cada 2–3 h (ver rótulo); cuidado com açúcar em diabéticos',
+    contraindicacoes: [],
+    interacoes: [],
+  },
+  benzidamina: {
+    dci: 'benzidamina',
+    nome: 'Benzidamina (colutório/spray)',
+    classe: 'garganta-aine',
+    posologiaAdulto: 'Gargarejo/pulverização a cada 1,5–3 h; não engolir',
+    contraindicacoes: [
+      { id: 'benz-alergia-aine', descricao: 'Alergia a AINEs', gravidade: 'relativa', avaliar: (d) => tem(d.alergias, 'aine') },
+    ],
+    interacoes: [],
+  },
+  flurbiprofeno: {
+    dci: 'flurbiprofeno',
+    nome: 'Flurbiprofeno (pastilhas)',
+    classe: 'aine',
+    posologiaAdulto: 'Chupar 1 pastilha a cada 3–6 h, máx. 5/dia, até 3 dias',
+    contraindicacoes: contraindicacoesAINE(),
+    interacoes: interacoesAINE(),
+  },
+
+  // --- Rinite alérgica ---
+  cetirizina: {
+    dci: 'cetirizina',
+    nome: 'Cetirizina',
+    classe: 'anti-histaminico',
+    posologiaAdulto: '10 mg 1x/dia (pode causar alguma sonolência)',
+    contraindicacoes: [
+      { id: 'cet-renal', descricao: 'Doença renal (ajuste de dose)', gravidade: 'relativa', avaliar: (d) => tem(d.patologias, 'doenca-renal') },
+    ],
+    interacoes: [],
+  },
+  fexofenadina: {
+    dci: 'fexofenadina',
+    nome: 'Fexofenadina',
+    classe: 'anti-histaminico',
+    posologiaAdulto: '120–180 mg 1x/dia (não sedativo)',
+    contraindicacoes: [],
+    interacoes: [
+      { comDci: 'antiacido', descricao: 'Antiácidos com Al/Mg reduzem a absorção (espaçar 2 h)', gravidade: 'leve' },
+    ],
+  },
+
+  // --- Obstipação ---
+  macrogol: {
+    dci: 'macrogol',
+    nome: 'Macrogol (PEG)',
+    classe: 'laxante-osmotico',
+    posologiaAdulto: '1 saqueta 1–3x/dia com água; efeito em 1–2 dias',
+    contraindicacoes: [],
+    interacoes: [],
+  },
+  lactulose: {
+    dci: 'lactulose',
+    nome: 'Lactulose',
+    classe: 'laxante-osmotico',
+    posologiaAdulto: '15 mL 1–2x/dia; pode dar flatulência inicial',
+    contraindicacoes: [],
+    interacoes: [],
+  },
+  bisacodilo: {
+    dci: 'bisacodilo',
+    nome: 'Bisacodilo',
+    classe: 'laxante-estimulante',
+    posologiaAdulto: '5–10 mg à noite; uso pontual (não prolongar)',
+    contraindicacoes: [
+      { id: 'bisa-idade', descricao: 'Não recomendado abaixo dos 10 anos sem indicação', gravidade: 'relativa', avaliar: (d) => d.idade < 10 },
+    ],
+    interacoes: [],
+  },
+
+  // --- Diarreia ---
+  loperamida: {
+    dci: 'loperamida',
+    nome: 'Loperamida',
+    classe: 'antidiarreico',
+    posologiaAdulto: '2 mg após cada dejeção, máx. 6/dia (MNSRM), até 2 dias',
+    contraindicacoes: [
+      { id: 'lop-idade', descricao: 'Não usar abaixo dos 12 anos sem indicação médica', gravidade: 'absoluta', avaliar: (d) => d.idade < 12 },
+    ],
+    interacoes: [],
+  },
+  'reidratacao-oral': {
+    dci: 'reidratacao-oral',
+    nome: 'Sais de reidratação oral',
+    classe: 'reidratacao',
+    posologiaAdulto: 'Reconstituir e beber após cada dejeção; repor líquidos',
+    contraindicacoes: [],
+    interacoes: [],
+  },
+
+  // --- Náuseas / enjoo ---
+  dimenidrinato: {
+    dci: 'dimenidrinato',
+    nome: 'Dimenidrinato',
+    classe: 'anti-emetico',
+    posologiaAdulto: '50 mg até 3x/dia; pode causar sonolência (cuidado a conduzir)',
+    contraindicacoes: [
+      { id: 'dim-glaucoma', descricao: 'Glaucoma de ângulo fechado', gravidade: 'relativa', avaliar: (d) => tem(d.patologias, 'glaucoma') },
+      { id: 'dim-prostata', descricao: 'Hiperplasia da próstata / retenção urinária', gravidade: 'relativa', avaliar: (d) => tem(d.patologias, 'hiperplasia-prostatica') },
+      { id: 'dim-idade', descricao: 'Não recomendado abaixo dos 2 anos', gravidade: 'absoluta', avaliar: (d) => d.idade < 2 },
+    ],
+    interacoes: [
+      { comDci: 'imao', descricao: 'Com IMAO: potenciação anticolinérgica', gravidade: 'moderada' },
+    ],
+  },
+
+  // --- Dores musculares (tópicos) ---
+  'diclofenac-topico': {
+    dci: 'diclofenac-topico',
+    nome: 'Diclofenac gel (tópico)',
+    classe: 'aine-topico',
+    posologiaAdulto: 'Aplicar na zona 3–4x/dia; não em pele lesada/mucosas',
+    contraindicacoes: [
+      { id: 'dtop-alergia', descricao: 'Alergia a AINEs', gravidade: 'absoluta', avaliar: (d) => tem(d.alergias, 'aine') },
+      { id: 'dtop-gravidez-3t', descricao: 'Gravidez no 3.º trimestre', gravidade: 'absoluta', avaliar: (d) => d.gravidez && (d.semanasGestacao ?? 0) >= 28 },
+    ],
+    interacoes: [],
+  },
+  'ibuprofeno-topico': {
+    dci: 'ibuprofeno-topico',
+    nome: 'Ibuprofeno gel (tópico)',
+    classe: 'aine-topico',
+    posologiaAdulto: 'Aplicar na zona 3–4x/dia; não em pele lesada/mucosas',
+    contraindicacoes: [
+      { id: 'itop-alergia', descricao: 'Alergia a AINEs', gravidade: 'absoluta', avaliar: (d) => tem(d.alergias, 'aine') },
+      { id: 'itop-gravidez-3t', descricao: 'Gravidez no 3.º trimestre', gravidade: 'absoluta', avaliar: (d) => d.gravidez && (d.semanasGestacao ?? 0) >= 28 },
+    ],
+    interacoes: [],
+  },
 };
 
 export function getSubstancia(dci) {

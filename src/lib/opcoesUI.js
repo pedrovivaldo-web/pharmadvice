@@ -36,6 +36,7 @@ export const PATOLOGIAS = [
   { id: 'asma', label: 'Asma' },
   { id: 'hipertiroidismo', label: 'Hipertiroidismo' },
   { id: 'glaucoma', label: 'Glaucoma' },
+  { id: 'hiperplasia-prostatica', label: 'Hiperplasia da próstata' },
 ];
 
 export const MEDICACAO_COMUM = [

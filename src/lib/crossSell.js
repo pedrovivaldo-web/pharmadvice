@@ -16,12 +16,15 @@ import { ordenarComercial } from './rankingComercial.js';
  * Verifica se `produto` pode juntar-se aos `escolhidos` sem combinação perigosa.
  * @returns {string|null} motivo do conflito, ou null se for seguro combinar.
  */
+// Qualquer AINE conta como AINE para a guarda (oral 'aine' ou tópico 'aine-topico').
+const ehAine = (s) => typeof s?.classe === 'string' && s.classe.startsWith('aine');
+
 export function conflitoCombinacao(produto, escolhidos) {
   const sub = getSubstancia(produto.dci);
   for (const e of escolhidos) {
     if (e.produto.dci === produto.dci) return 'mesma-substancia';
     const subE = getSubstancia(e.produto.dci);
-    if (sub?.classe === 'aine' && subE?.classe === 'aine') return 'dois-aine';
+    if (ehAine(sub) && ehAine(subE)) return 'dois-aine';
   }
   return null;
 }
