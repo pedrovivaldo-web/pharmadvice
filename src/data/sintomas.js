@@ -82,6 +82,12 @@ export const SINTOMAS = {
         avaliar: (c) => resp(c, 'febre-alta') || duracaoDias(c) > 3,
       },
       {
+        id: 'febre-refrataria',
+        descricao: 'Febre que não cede aos antipiréticos',
+        pergunta: 'A febre não baixa mesmo com antipiréticos (paracetamol/ibuprofeno)?',
+        avaliar: (c) => resp(c, 'febre-refrataria'),
+      },
+      {
         id: 'exantema',
         descricao: 'Erupção cutânea que não desaparece à pressão',
         pergunta: 'Tem manchas na pele que não desaparecem quando carrega?',
@@ -133,6 +139,18 @@ export const SINTOMAS = {
         pergunta: 'Notou sangue ao tossir?',
         avaliar: (c) => resp(c, 'hemoptise'),
       },
+      {
+        id: 'tosse-ieca',
+        descricao: 'Toma um IECA (a tosse seca pode ser do fármaco) — referenciar',
+        pergunta: null,
+        avaliar: (c) => (c?.doente?.medicacao ?? []).includes('lisinopril'),
+      },
+      {
+        id: 'tosse-antialergico',
+        descricao: 'Já tomou antialérgico e a tosse não passa',
+        pergunta: 'Já tomou antialérgico e a tosse não passou?',
+        avaliar: (c) => resp(c, 'tosse-antialergico'),
+      },
       ...alarmesGerais(),
     ],
   },
@@ -140,7 +158,7 @@ export const SINTOMAS = {
   'tosse-produtiva': {
     id: 'tosse-produtiva',
     nome: 'Tosse produtiva / com expetoração',
-    substanciasIndicadas: ['acetilcisteina'],
+    substanciasIndicadas: ['acetilcisteina', 'ambroxol'],
     sinaisAlarme: [
       {
         id: 'tosse-cronica-p',
@@ -161,6 +179,7 @@ export const SINTOMAS = {
   pirose: {
     id: 'pirose',
     nome: 'Azia / pirose',
+    notaAconselhamento: 'Se só controla com IBP (omeprazol) ou recorre com frequência, aconselhar médico.',
     substanciasIndicadas: ['antiacido', 'famotidina', 'omeprazol'],
     sinaisAlarme: [
       {
@@ -213,9 +232,9 @@ export const SINTOMAS = {
   'rinite-alergica': {
     id: 'rinite-alergica',
     nome: 'Rinite alérgica / alergia',
-    substanciasIndicadas: ['loratadina', 'cetirizina', 'fexofenadina'],
+    substanciasIndicadas: ['loratadina', 'cetirizina', 'fexofenadina', 'desloratadina'],
     papeis: [
-      { id: 'anti-histaminico', nome: 'Anti-histamínico oral', dcis: ['loratadina', 'cetirizina', 'fexofenadina'], principal: true },
+      { id: 'anti-histaminico', nome: 'Anti-histamínico oral', dcis: ['loratadina', 'cetirizina', 'fexofenadina', 'desloratadina'], principal: true },
     ],
     sinaisAlarme: [
       { id: 'rinite-dispneia', descricao: 'Falta de ar ou pieira (possível componente asmático)', pergunta: 'Tem falta de ar ou pieira?', avaliar: (c) => resp(c, 'rinite-dispneia') },
@@ -227,6 +246,7 @@ export const SINTOMAS = {
   obstipacao: {
     id: 'obstipacao',
     nome: 'Obstipação',
+    notaAconselhamento: 'Preferir laxante osmótico; retomar hábitos (fibra, água, atividade) enquanto regulariza.',
     substanciasIndicadas: ['macrogol', 'lactulose', 'bisacodilo'],
     papeis: [
       { id: 'laxante', nome: 'Laxante', dcis: ['macrogol', 'lactulose', 'bisacodilo'], principal: true },
@@ -242,6 +262,7 @@ export const SINTOMAS = {
   diarreia: {
     id: 'diarreia',
     nome: 'Diarreia',
+    notaAconselhamento: 'Reforçar a hidratação oral (SRO). Se > 3 dias, febre alta ou desidratação → médico.',
     substanciasIndicadas: ['reidratacao-oral', 'loperamida'],
     papeis: [
       { id: 'reidratacao', nome: 'Reidratação oral', dcis: ['reidratacao-oral'], principal: true },
@@ -259,6 +280,7 @@ export const SINTOMAS = {
   nauseas: {
     id: 'nauseas',
     nome: 'Náuseas / enjoo',
+    notaAconselhamento: 'Se já usou um anti-emético (ex.: Nausefe) sem melhoria, aconselhar médico.',
     substanciasIndicadas: ['dimenidrinato'],
     papeis: [
       { id: 'anti-emetico', nome: 'Anti-emético', dcis: ['dimenidrinato'], principal: true },
@@ -297,7 +319,7 @@ export const SINTOMAS = {
     substanciasIndicadas: ['aciclovir-topico'],
     papeis: [{ id: 'antiviral', nome: 'Antiviral tópico', dcis: ['aciclovir-topico'], principal: true }],
     sinaisAlarme: [
-      { id: 'herpes-imuno', descricao: 'Sistema imunitário debilitado (imunossupressão)', pergunta: 'Tem o sistema imunitário debilitado (ex.: quimioterapia, imunossupressores)?', avaliar: (c) => resp(c, 'herpes-imuno') },
+      { id: 'herpes-imuno', nivel: 'vigiar', descricao: 'Imunossuprimido: aconselhar antiviral em creme e vigiar (médico se não melhorar)', pergunta: 'Tem o sistema imunitário debilitado (ex.: quimioterapia, imunossupressores)?', avaliar: (c) => resp(c, 'herpes-imuno') },
       { id: 'herpes-olho', descricao: 'Lesão junto ao olho', pergunta: 'A lesão é perto do olho?', avaliar: (c) => resp(c, 'herpes-olho') },
       { id: 'herpes-boca', descricao: 'Lesões extensas dentro da boca/gengivas (primoinfecção)', pergunta: 'Tem muitas lesões dentro da boca ou nas gengivas?', avaliar: (c) => resp(c, 'herpes-boca') },
       { id: 'herpes-prolongado', descricao: 'Lesão que não sara em > 14 dias', pergunta: null, avaliar: (c) => duracaoDias(c) > 14 },
@@ -307,14 +329,16 @@ export const SINTOMAS = {
   'micose-cutanea': {
     id: 'micose-cutanea',
     nome: 'Micose da pele (pé de atleta, etc.)',
-    substanciasIndicadas: ['clotrimazol-topico', 'terbinafina-topico', 'econazol-topico', 'tioconazol-topico'],
-    papeis: [{ id: 'antifungico', nome: 'Antifúngico tópico', dcis: ['clotrimazol-topico', 'terbinafina-topico', 'econazol-topico', 'tioconazol-topico'], principal: true }],
+    substanciasIndicadas: ['clotrimazol-topico', 'terbinafina-topico', 'econazol-topico', 'tioconazol-topico', 'cetoconazol-topico'],
+    papeis: [{ id: 'antifungico', nome: 'Antifúngico tópico', dcis: ['clotrimazol-topico', 'terbinafina-topico', 'econazol-topico', 'tioconazol-topico', 'cetoconazol-topico'], principal: true }],
     sinaisAlarme: [
-      { id: 'mic-unhas', descricao: 'Unhas afetadas (onicomicose — tratamento oral/médico)', pergunta: 'As unhas estão afetadas?', avaliar: (c) => resp(c, 'mic-unhas') },
-      { id: 'mic-extenso', descricao: 'Grande extensão ou couro cabeludo', pergunta: 'É uma área grande ou no couro cabeludo?', avaliar: (c) => resp(c, 'mic-extenso') },
-      { id: 'mic-diabetes', descricao: 'Pessoa com diabetes (maior risco)', pergunta: null, avaliar: (c) => (c?.doente?.patologias ?? []).includes('diabetes') },
+      // Unhas e grande extensão/couro cabeludo: aconselhar (antifúngico da unha /
+      // cetoconazol no couro cabeludo) e VIGIAR — médico se não melhorar.
+      { id: 'mic-unhas', nivel: 'vigiar', descricao: 'Unhas afetadas (aconselhar antifúngico específico da unha e vigiar)', pergunta: 'As unhas estão afetadas?', avaliar: (c) => resp(c, 'mic-unhas') },
+      { id: 'mic-extenso', nivel: 'vigiar', descricao: 'Grande extensão ou couro cabeludo (cetoconazol; vigiar)', pergunta: 'É uma área grande ou no couro cabeludo?', avaliar: (c) => resp(c, 'mic-extenso') },
+      { id: 'mic-ferida', descricao: 'Ferida ou úlcera na zona afetada (sobretudo em diabético) — referenciar', pergunta: 'Tem ferida ou úlcera na zona afetada?', avaliar: (c) => resp(c, 'mic-ferida') },
       { id: 'mic-infecao', descricao: 'Sinais de infeção bacteriana (pus, calor, vermelhidão intensa)', pergunta: 'Tem sinais de infeção (pus, calor, vermelhidão intensa)?', avaliar: (c) => resp(c, 'mic-infecao') },
-      { id: 'mic-prolongada', descricao: 'Sem melhoria após 2–4 semanas', pergunta: null, avaliar: (c) => duracaoDias(c) > 28 },
+      { id: 'mic-prolongada', nivel: 'vigiar', descricao: 'Sem melhoria após 2–4 semanas (vigiar)', pergunta: null, avaliar: (c) => duracaoDias(c) > 28 },
     ],
   },
 
@@ -324,8 +348,8 @@ export const SINTOMAS = {
     substanciasIndicadas: ['clotrimazol-vaginal'],
     papeis: [{ id: 'antifungico-vaginal', nome: 'Antifúngico vaginal', dcis: ['clotrimazol-vaginal'], principal: true }],
     sinaisAlarme: [
-      { id: 'cv-primeiro', descricao: 'Primeiro episódio / nunca diagnosticado por médico', pergunta: 'É a primeira vez, ou nunca foi diagnosticada por um médico?', avaliar: (c) => resp(c, 'cv-primeiro') },
-      { id: 'cv-recorrente', descricao: 'Episódios frequentes (> 4 por ano)', pergunta: 'Tem mais de 4 episódios por ano?', avaliar: (c) => resp(c, 'cv-recorrente') },
+      { id: 'cv-primeiro', nivel: 'vigiar', descricao: '1.º episódio: se o quadro for claramente candidíase, aconselhar creme e vigiar (confirmar com médico)', pergunta: 'É a primeira vez, ou nunca foi diagnosticada por um médico?', avaliar: (c) => resp(c, 'cv-primeiro') },
+      { id: 'cv-recorrente', nivel: 'vigiar', descricao: 'Recorrente (> 4/ano): pode fazer creme vaginal, mas aconselhar médico', pergunta: 'Tem mais de 4 episódios por ano?', avaliar: (c) => resp(c, 'cv-recorrente') },
       { id: 'cv-atipico', descricao: 'Corrimento com cheiro/cor atípica, dor pélvica ou febre', pergunta: 'Tem corrimento com mau cheiro/cor atípica, dor pélvica ou febre?', avaliar: (c) => resp(c, 'cv-atipico') },
       { id: 'cv-gravidez', descricao: 'Gravidez — referenciar', pergunta: null, avaliar: (c) => c?.doente?.gravidez === true },
       { id: 'cv-idade', descricao: 'Fora dos 16–60 anos', pergunta: null, avaliar: (c) => (c?.doente?.idade ?? 30) < 16 || (c?.doente?.idade ?? 30) > 60 },
@@ -347,6 +371,7 @@ export const SINTOMAS = {
   aftas: {
     id: 'aftas',
     nome: 'Aftas / feridas na boca',
+    notaAconselhamento: 'Se persistir alguns dias, referir com cicatrizante oral (líquido).',
     substanciasIndicadas: ['afta-local', 'benzidamina'],
     papeis: [{ id: 'local', nome: 'Tratamento local', dcis: ['afta-local', 'benzidamina'], principal: true }],
     sinaisAlarme: [
@@ -359,10 +384,10 @@ export const SINTOMAS = {
   'picadas-prurido': {
     id: 'picadas-prurido',
     nome: 'Picadas / comichão / dermatite ligeira',
-    substanciasIndicadas: ['hidrocortisona-topico', 'dimetindeno-topico', 'loratadina', 'cetirizina'],
+    substanciasIndicadas: ['hidrocortisona-topico', 'dimetindeno-topico', 'loratadina', 'cetirizina', 'desloratadina'],
     papeis: [
       { id: 'topico', nome: 'Alívio tópico', dcis: ['hidrocortisona-topico', 'dimetindeno-topico'], principal: true },
-      { id: 'anti-histaminico', nome: 'Anti-histamínico oral (comichão)', dcis: ['loratadina', 'cetirizina'], principal: false },
+      { id: 'anti-histaminico', nome: 'Anti-histamínico oral (comichão)', dcis: ['loratadina', 'cetirizina', 'desloratadina'], principal: false },
     ],
     sinaisAlarme: [
       { id: 'pic-anafilaxia', descricao: 'Falta de ar, inchaço da língua/lábios ou urticária generalizada (EMERGÊNCIA)', pergunta: 'Tem falta de ar, inchaço da língua/lábios ou borbulhas por todo o corpo?', avaliar: (c) => resp(c, 'pic-anafilaxia') },

@@ -23,27 +23,37 @@ describe('herpes labial', () => {
     expect(r.referenciar).toBe(false);
     expect(r.conjunto[0].produto.dci).toBe('aciclovir-topico');
   });
-  it('imunossuprimido → referenciar', () => {
+  it('imunossuprimido → NÃO refere; recomenda e vigia', () => {
     const r = aconselhar({ sintoma: 'herpes-labial', duracaoDias: 1, doente: { idade: 30 }, respostas: { 'herpes-imuno': true } }, CAT, cfg);
-    expect(r.referenciar).toBe(true);
+    expect(r.referenciar).toBe(false);
+    expect(r.vigilancia.map((v) => v.id)).toContain('herpes-imuno');
+    expect(r.conjunto[0].produto.dci).toBe('aciclovir-topico');
   });
 });
 
 describe('micose cutânea', () => {
-  it('unhas afetadas → referenciar', () => {
+  it('unhas afetadas → vigilância (recomenda + vigiar), não refere', () => {
     const r = aconselhar({ sintoma: 'micose-cutanea', duracaoDias: 5, doente: { idade: 40 }, respostas: { 'mic-unhas': true } }, CAT, cfg);
-    expect(r.referenciar).toBe(true);
+    expect(r.referenciar).toBe(false);
+    expect(r.vigilancia.map((v) => v.id)).toContain('mic-unhas');
+    expect(r.conjunto.length).toBeGreaterThan(0);
   });
-  it('diabético → referenciar (regra de perfil)', () => {
+  it('diabético SEM ferida → não refere (recomenda)', () => {
     const r = aconselhar({ sintoma: 'micose-cutanea', duracaoDias: 5, doente: { idade: 40, patologias: ['diabetes'] }, respostas: {} }, CAT, cfg);
+    expect(r.referenciar).toBe(false);
+  });
+  it('ferida na zona → referenciar', () => {
+    const r = aconselhar({ sintoma: 'micose-cutanea', duracaoDias: 5, doente: { idade: 40, patologias: ['diabetes'] }, respostas: { 'mic-ferida': true } }, CAT, cfg);
     expect(r.referenciar).toBe(true);
   });
 });
 
 describe('candidíase vaginal', () => {
-  it('primeiro episódio → referenciar', () => {
+  it('primeiro episódio → vigilância (aconselhar e vigiar), não refere', () => {
     const r = aconselhar({ sintoma: 'candidiase-vaginal', duracaoDias: 2, doente: { idade: 30 }, respostas: { 'cv-primeiro': true } }, CAT, cfg);
-    expect(r.referenciar).toBe(true);
+    expect(r.referenciar).toBe(false);
+    expect(r.vigilancia.map((v) => v.id)).toContain('cv-primeiro');
+    expect(r.conjunto[0].produto.dci).toBe('clotrimazol-vaginal');
   });
   it('grávida → referenciar', () => {
     const r = aconselhar({ sintoma: 'candidiase-vaginal', duracaoDias: 2, doente: { idade: 30, gravidez: true }, respostas: {} }, CAT, cfg);

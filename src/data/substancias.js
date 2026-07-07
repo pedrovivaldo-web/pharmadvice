@@ -214,7 +214,7 @@ export const SUBSTANCIAS = {
     dci: 'acetilcisteina',
     nome: 'Acetilcisteína',
     classe: 'mucolitico',
-    posologiaAdulto: '600 mg 1x/dia; para tosse PRODUTIVA; não tomar ao deitar',
+    posologiaAdulto: '600 mg 1x/dia; para tosse PRODUTIVA',
     contraindicacoes: [
       {
         id: 'ac-ulcera',
@@ -489,6 +489,31 @@ export const SUBSTANCIAS = {
     contraindicacoes: [
       { id: 'hc-idade', descricao: 'Não usar abaixo dos 10 anos sem indicação', gravidade: 'absoluta', avaliar: (d) => d.idade < 10 },
     ],
+    interacoes: [],
+  },
+
+  // ===================================================================
+  // Acrescentos da validação do farmacêutico
+  // ===================================================================
+
+  ambroxol: {
+    dci: 'ambroxol', nome: 'Ambroxol', classe: 'mucolitico',
+    posologiaAdulto: '30 mg até 3x/dia; para tosse produtiva',
+    contraindicacoes: [
+      { id: 'amb-ulcera', descricao: 'Úlcera péptica ativa (precaução)', gravidade: 'relativa', avaliar: (d) => tem(d.patologias, 'ulcera-peptica') },
+    ],
+    interacoes: [],
+  },
+  desloratadina: {
+    dci: 'desloratadina', nome: 'Desloratadina', classe: 'anti-histaminico',
+    posologiaAdulto: '5 mg 1x/dia (não sedativo)',
+    contraindicacoes: [],
+    interacoes: [],
+  },
+  'cetoconazol-topico': {
+    dci: 'cetoconazol-topico', nome: 'Cetoconazol (champô/creme)', classe: 'antifungico-topico',
+    posologiaAdulto: 'Champô 2x/semana no couro cabeludo; creme 1–2x/dia na pele',
+    contraindicacoes: [],
     interacoes: [],
   },
 };

@@ -29,6 +29,8 @@ export function aconselhar(consulta, catalogo, config = {}) {
       referenciar: true,
       motivo: triagem.sintomaDesconhecido ? 'sintoma-fora-de-ambito' : 'sinais-de-alarme',
       sinaisAlarme: triagem.sinais,
+      vigilancia: triagem.vigilancia,
+      notaAconselhamento: null,
       recomendacoes: [],
       conjunto: [],
       semStock: [],
@@ -53,6 +55,10 @@ export function aconselhar(consulta, catalogo, config = {}) {
     referenciar: false,
     motivo: null,
     sinaisAlarme: [],
+    // Sinais de nível 'vigiar' presentes: recomendar E aconselhar médico se não melhorar.
+    vigilancia: triagem.vigilancia,
+    // Nota de aconselhamento do sintoma (texto de apoio ao balcão), se existir.
+    notaAconselhamento: sintoma.notaAconselhamento ?? null,
     sintoma: sintoma.id,
     // Conjunto de co-recomendação (cross-selling), já com guarda de combinação.
     conjunto,
