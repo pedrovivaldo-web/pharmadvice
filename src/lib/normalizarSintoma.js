@@ -26,7 +26,7 @@ const CANONICOS = [
   ['manchas', 'Manchas / hiperpigmentação / queratoses', true, /manchas cutanea|hiperpigment|queratos/],
   ['pes-calosidades', 'Pés (secos, calos, gretas, suor)', true, /\bpes\b (secos|cansados)|gretas nos calcanhar|\bcalos\b|calosidade|suor dos pes|odor dos pes|pes secos/],
   ['hiperidrose', 'Suor excessivo (hiperidrose)', true, /\bsuor\b|transpirac|hiperidrose/],
-  ['cicatrizacao', 'Cicatrização / feridas superficiais', true, /cicatriz|feridas superficia|escoriac|\bferidas\b|\bferida\b|pele exsudativa/],
+  ['cicatrizacao', 'Cicatrização / feridas superficiais', true, /cicatriz|feridas superficia|escoriac|\bferida(s)?\b(?! na boca)|pele exsudativa/],
   ['desinfecao', 'Desinfeção / lavagem de feridas', true, /desinfec|lavagem de feridas|lavagem/],
   ['irritacao-cutanea', 'Irritação / vermelhidão cutânea', true, /irritac(ao|oes) cutanea|pele irritada|pele avermelhada|vermelhidao|pele sensivel/],
   ['pele-seca', 'Pele seca', true, /pele (muito )?seca|secura cutanea|pele aspera|pele seca das maos/],
